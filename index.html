@@ -1,0 +1,1060 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Rakhi Treasure Chest</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=Parisienne&family=Quicksand:wght@400;600;700&display=swap">
+<style>
+/* ==================================================================
+   Everything you'd want to change lives in the CONFIG block
+   near the bottom of this file, just above </body>.
+   ================================================================== */
+:root{
+  color-scheme: light;
+  --blush:#fff3f6;
+  --lav:#f5eafa;
+  --card:#fffafc;
+  --card-2:#fff0f5;
+  --rose:#e8537f;
+  --rose-deep:#c13a63;
+  --rose-pale:#ffd9e4;
+  --plum:#4e1f33;
+  --plum-soft:#8b5f72;
+  --gold:#d9a441;
+  --gold-pale:#f6e3ba;
+  --line:#f6d4de;
+  --mint:#79c9b4;
+  --disp:"Fraunces",Georgia,"Times New Roman",serif;
+  --script:"Parisienne","Brush Script MT",cursive;
+  --body:"Quicksand","Trebuchet MS",system-ui,sans-serif;
+  --shadow:0 18px 44px rgba(193,58,99,.16), 0 3px 10px rgba(193,58,99,.10);
+}
+*{box-sizing:border-box}
+
+body{
+  margin:0;
+  min-height:100vh;
+  padding:20px 14px 34px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:
+    radial-gradient(120% 80% at 12% 0%, #ffe6ef 0%, transparent 55%),
+    radial-gradient(110% 80% at 92% 8%, var(--lav) 0%, transparent 52%),
+    var(--blush);
+  font-family:var(--body);
+  color:var(--plum);
+  -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+}
+
+#petals{position:fixed;inset:0;width:100%;height:100%;z-index:0;pointer-events:none}
+#confetti{position:fixed;inset:0;width:100%;height:100%;z-index:60;pointer-events:none}
+
+/* ---------------- card ---------------- */
+.card{
+  position:relative;
+  z-index:1;
+  width:100%;
+  max-width:440px;
+  background:linear-gradient(168deg,var(--card) 0%,var(--card-2) 100%);
+  border:1px solid var(--line);
+  border-radius:26px;
+  box-shadow:var(--shadow);
+  padding:22px 22px 26px;
+  overflow:hidden;
+}
+.card::before{ /* thread trim along the top edge */
+  content:"";
+  position:absolute;left:0;right:0;top:0;height:5px;
+  background:repeating-linear-gradient(90deg,
+    var(--rose) 0 12px, var(--gold) 12px 20px, var(--rose-pale) 20px 30px);
+  opacity:.85;
+}
+
+/* ---------------- progress thread ---------------- */
+.thread{
+  display:flex;align-items:center;gap:9px;
+  margin:8px 0 20px;
+}
+.thread-track{
+  position:relative;flex:1;height:3px;border-radius:3px;
+  background:repeating-linear-gradient(90deg,var(--line) 0 5px,transparent 5px 10px);
+}
+.thread-fill{
+  position:absolute;left:0;top:0;height:100%;border-radius:3px;width:0%;
+  background:linear-gradient(90deg,var(--gold),var(--rose));
+  transition:width .45s cubic-bezier(.4,1.3,.5,1);
+}
+.thread-bud{
+  position:absolute;top:50%;left:0;transform:translate(-50%,-50%);
+  font-size:.9rem;transition:left .45s cubic-bezier(.4,1.3,.5,1);
+}
+.thread-step{
+  font-family:var(--body);font-weight:700;
+  font-size:.62rem;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--plum-soft);font-variant-numeric:tabular-nums;white-space:nowrap;
+}
+
+/* ---------------- type ---------------- */
+h1,h2{font-family:var(--disp);font-weight:700;line-height:1.16;text-wrap:balance;margin:0 0 10px}
+h1{font-size:1.62rem}
+h2{font-size:1.34rem}
+.script{
+  font-family:var(--script);
+  font-weight:400;
+  font-size:2.5rem;
+  line-height:1.05;
+  color:var(--rose-deep);
+  margin:0 0 6px;
+  text-wrap:balance;
+}
+p{margin:0 0 14px;font-size:.95rem;line-height:1.6}
+.lede{color:var(--plum-soft)}
+.tiny{font-size:.78rem;color:var(--plum-soft)}
+.eyebrow{
+  font-size:.63rem;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--rose);font-weight:700;margin:0 0 12px;
+  display:flex;align-items:center;gap:9px;
+}
+.eyebrow::after{content:"";flex:1;height:1px;background:var(--line)}
+.center{text-align:center}
+
+/* ---------------- buttons ---------------- */
+.btn{
+  font-family:var(--body);font-weight:700;font-size:.98rem;
+  color:#fff;
+  background:linear-gradient(135deg,var(--rose) 0%,var(--rose-deep) 100%);
+  border:none;border-radius:999px;
+  padding:14px 30px;cursor:pointer;
+  box-shadow:0 8px 18px rgba(232,83,127,.32);
+  transition:transform .14s ease, box-shadow .14s ease, opacity .2s ease;
+}
+.btn:hover{transform:translateY(-2px);box-shadow:0 12px 22px rgba(232,83,127,.38)}
+.btn:active{transform:translateY(1px)}
+.btn:disabled{opacity:.45;cursor:not-allowed;box-shadow:none;transform:none}
+.btn.wide{width:100%}
+.btn.gold{background:linear-gradient(135deg,#e8b95c 0%,var(--gold) 100%);box-shadow:0 8px 18px rgba(217,164,65,.34);color:#4a3410}
+.btn.ghost{
+  background:transparent;color:var(--rose-deep);
+  border:1.5px solid var(--rose-pale);box-shadow:none;font-weight:600;
+}
+.linkbtn{
+  font-family:var(--body);font-size:.82rem;font-weight:600;
+  background:none;border:none;color:var(--plum-soft);
+  text-decoration:underline;text-underline-offset:3px;cursor:pointer;padding:6px;
+}
+:focus-visible{outline:2px solid var(--rose);outline-offset:3px}
+
+/* floating (dodging) buttons */
+.float-zone{position:relative;min-height:154px;margin-top:14px}
+.float-zone .anchor{position:relative;z-index:2}
+.floaty{
+  position:absolute;left:50%;top:74px;transform:translateX(-50%);z-index:3;
+  font-family:var(--body);font-weight:600;font-size:.9rem;
+  background:#fff;color:var(--plum-soft);
+  border:1.5px solid var(--line);border-radius:999px;
+  padding:11px 22px;cursor:pointer;
+  box-shadow:0 4px 12px rgba(193,58,99,.10);
+  transition:left .2s cubic-bezier(.34,1.4,.5,1), top .2s cubic-bezier(.34,1.4,.5,1), opacity .3s ease;
+}
+.floaty.gone{opacity:.25;pointer-events:none;text-decoration:line-through}
+
+/* ---------------- screens ---------------- */
+.scene{display:none}
+.scene.is-active{display:block;animation:rise .38s cubic-bezier(.25,1.1,.4,1) both}
+@keyframes rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+
+/* ---------------- rakhi + thread art ---------------- */
+.art{display:block;margin:4px auto 10px;max-width:100%}
+#tieThread{transition:stroke-dashoffset .12s linear}
+#tieRakhi{transform-box:fill-box;transform-origin:center;transition:transform .3s cubic-bezier(.3,1.6,.5,1),opacity .3s ease}
+
+.slider-wrap{margin-top:6px}
+.slide-label{
+  display:flex;justify-content:space-between;align-items:center;
+  font-size:.72rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--plum-soft);margin-bottom:8px;
+}
+input[type="range"]{
+  -webkit-appearance:none;appearance:none;
+  width:100%;height:34px;background:transparent;cursor:grab;
+}
+input[type="range"]::-webkit-slider-runnable-track{
+  height:12px;border-radius:999px;
+  background:linear-gradient(90deg,var(--rose-pale),var(--lav));
+  border:1px solid var(--line);
+}
+input[type="range"]::-moz-range-track{
+  height:12px;border-radius:999px;
+  background:linear-gradient(90deg,var(--rose-pale),var(--lav));
+  border:1px solid var(--line);
+}
+input[type="range"]::-webkit-slider-thumb{
+  -webkit-appearance:none;appearance:none;
+  width:32px;height:32px;margin-top:-11px;border-radius:50%;
+  background:radial-gradient(circle at 34% 30%,#fff 0 12%,var(--rose) 13% 62%,var(--rose-deep) 100%);
+  border:3px solid var(--gold-pale);
+  box-shadow:0 4px 12px rgba(232,83,127,.4);
+}
+input[type="range"]::-moz-range-thumb{
+  width:32px;height:32px;border-radius:50%;border:3px solid var(--gold-pale);
+  background:radial-gradient(circle at 34% 30%,#fff 0 12%,var(--rose) 13% 62%,var(--rose-deep) 100%);
+  box-shadow:0 4px 12px rgba(232,83,127,.4);
+}
+
+/* ---------------- gift box ---------------- */
+.giftbox{display:block;margin:0 auto;cursor:pointer;max-width:210px}
+.giftbox:hover #boxLid{transform:translateY(-5px)}
+#boxLid{transition:transform .5s cubic-bezier(.3,1.4,.5,1);transform-box:view-box}
+.giftbox.open #boxLid{transform:translate(26px,-96px) rotate(24deg)}
+.giftbox.open #boxGlow{opacity:1}
+#boxGlow{opacity:0;transition:opacity .5s ease .1s}
+
+/* ---------------- shopping tiles ---------------- */
+.tiles{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.tile{
+  font-family:var(--body);font-weight:700;font-size:.92rem;
+  background:#fff;color:var(--plum);
+  border:1.5px solid var(--line);border-radius:18px;
+  padding:16px 8px 13px;cursor:pointer;
+  box-shadow:0 4px 12px rgba(193,58,99,.08);
+  transition:transform .18s cubic-bezier(.3,1.4,.5,1), border-color .2s ease, box-shadow .2s ease;
+}
+.tile:hover{border-color:var(--rose-pale)}
+.tile .ic{display:block;font-size:1.6rem;margin-bottom:6px;line-height:1}
+.tile.wobble{animation:wobble .45s ease}
+@keyframes wobble{
+  0%,100%{transform:rotate(0)}
+  25%{transform:rotate(-7deg) scale(.96)}
+  60%{transform:rotate(6deg) scale(.98)}
+}
+.toast{
+  min-height:1.5em;margin:12px 0 0;text-align:center;
+  font-size:.86rem;font-weight:600;color:var(--rose-deep);
+}
+
+/* ---------------- treaty ---------------- */
+.promise{
+  display:flex;gap:11px;align-items:flex-start;
+  padding:12px 14px;margin-bottom:9px;
+  background:#fff;border:1.5px solid var(--line);border-radius:16px;
+  cursor:pointer;transition:border-color .2s ease,background .2s ease;
+}
+.promise:has(input:checked){border-color:var(--rose);background:#fff6f9}
+.promise input{
+  appearance:none;-webkit-appearance:none;
+  flex:0 0 auto;width:21px;height:21px;margin:1px 0 0;
+  border:2px solid var(--rose-pale);border-radius:7px;background:#fff;cursor:pointer;
+  transition:background .2s ease,border-color .2s ease;
+}
+.promise input:checked{
+  background:var(--rose) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M3 8.5l3.2 3.2L13 5' fill='none' stroke='%23fff' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/14px no-repeat;
+  border-color:var(--rose);
+}
+.promise span{font-size:.9rem;line-height:1.45}
+
+/* ---------------- inputs ---------------- */
+.field{margin-bottom:16px}
+.field > label{
+  display:block;font-size:.66rem;font-weight:700;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--plum-soft);margin-bottom:7px;
+}
+input[type="tel"],input[type="text"]{
+  font-family:var(--body);font-size:1.05rem;font-weight:600;color:var(--plum);
+  width:100%;padding:13px 16px;background:#fff;
+  border:1.5px solid var(--line);border-radius:14px;
+}
+input[type="tel"]:focus,input[type="text"]:focus{outline:none;border-color:var(--rose)}
+.warn{min-height:1.3em;margin:-6px 0 12px;font-size:.82rem;font-weight:600;color:var(--rose-deep)}
+
+/* ---------------- treasure chest ---------------- */
+.chest-stage{position:relative;display:flex;justify-content:center;margin-bottom:6px}
+#chest{max-width:230px;width:100%}
+.chest-stage.shake{animation:shake .42s cubic-bezier(.36,.07,.19,.97)}
+@keyframes shake{
+  10%,90%{transform:translateX(-3px)}
+  20%,80%{transform:translateX(5px)}
+  30%,50%,70%{transform:translateX(-8px)}
+  40%,60%{transform:translateX(8px)}
+}
+#chestLid{transition:transform .75s cubic-bezier(.3,1.35,.45,1);transform-box:view-box}
+#chestShackle{transition:transform .4s cubic-bezier(.3,1.6,.5,1);transform-box:view-box;transform-origin:34px 128px}
+#chestRays{opacity:0;transition:opacity .5s ease .25s}
+.chest-stage.unlocked #chestLid{transform:translate(0,-40px) rotate(-19deg)}
+.chest-stage.unlocked #chestShackle{transform:translate(0,-16px) rotate(-38deg);opacity:0}
+.chest-stage.unlocked #chestRays{opacity:1}
+
+.pin-dots{display:flex;justify-content:center;gap:11px;margin:14px 0 16px}
+.pin-dot{
+  width:14px;height:14px;border-radius:50%;
+  border:2px solid var(--rose-pale);background:#fff;
+  transition:background .18s ease,transform .18s cubic-bezier(.3,1.6,.5,1);
+}
+.pin-dot.filled{background:var(--rose);border-color:var(--rose);transform:scale(1.15)}
+.keypad{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;max-width:280px;margin:0 auto}
+.key{
+  font-family:var(--disp);font-weight:700;font-size:1.24rem;
+  color:var(--plum);background:#fff;
+  border:1.5px solid var(--line);border-radius:16px;
+  padding:14px 0;cursor:pointer;
+  box-shadow:0 3px 8px rgba(193,58,99,.08);
+  transition:transform .12s ease,background .15s ease;
+  font-variant-numeric:tabular-nums;
+}
+.key:hover{background:#fff6f9}
+.key:active{transform:scale(.94)}
+.key.util{font-family:var(--body);font-size:.86rem;font-weight:700;color:var(--plum-soft)}
+
+/* ---------------- voucher ---------------- */
+.voucher{
+  position:relative;
+  background:linear-gradient(150deg,#fff 0%,#fff2f7 55%,#fdeee0 100%);
+  border:1.5px solid var(--gold-pale);
+  border-radius:20px;
+  padding:20px 20px 22px;
+  box-shadow:0 10px 26px rgba(217,164,65,.20);
+  margin-bottom:16px;
+  overflow:hidden;
+}
+.voucher::after{ /* perforation */
+  content:"";position:absolute;left:0;right:0;bottom:64px;height:1px;
+  background:repeating-linear-gradient(90deg,var(--gold-pale) 0 6px,transparent 6px 12px);
+}
+.v-brand{
+  font-size:.64rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--gold);margin:0 0 4px;
+}
+.v-value{font-family:var(--disp);font-size:2.5rem;line-height:1;margin:0 0 2px;color:var(--rose-deep)}
+.v-for{font-size:.84rem;color:var(--plum-soft);margin:0 0 16px}
+
+.scratch-wrap{
+  position:relative;border-radius:14px;overflow:hidden;
+  background:#fff;border:1.5px dashed var(--rose-pale);
+  padding:14px 12px;text-align:center;margin-bottom:14px;
+}
+.code-label{font-size:.6rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--plum-soft);margin:0 0 5px}
+.code-val{
+  font-family:var(--disp);font-weight:700;font-size:1.34rem;letter-spacing:.08em;
+  color:var(--plum);margin:0;word-break:break-all;
+}
+#scratch{position:absolute;inset:0;width:100%;height:100%;cursor:grab;touch-action:none;transition:opacity .5s ease}
+#scratch.cleared{opacity:0;pointer-events:none}
+
+.v-rows{display:grid;grid-template-columns:auto 1fr;gap:8px 14px;font-size:.9rem;margin-bottom:14px}
+.v-rows dt{font-size:.62rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--plum-soft);padding-top:3px;white-space:nowrap}
+.v-rows dd{margin:0;font-weight:700;color:var(--plum);font-variant-numeric:tabular-nums}
+
+.steps{margin:0;padding-left:20px;font-size:.88rem;line-height:1.55;color:var(--plum-soft)}
+.steps li{margin-bottom:6px}
+.steps li::marker{color:var(--rose);font-weight:700}
+
+.note{
+  background:#fff;border:1.5px solid var(--line);border-radius:16px;
+  padding:13px 15px;font-size:.86rem;line-height:1.5;color:var(--plum-soft);
+  margin-bottom:16px;
+}
+.note strong{color:var(--plum)}
+
+.signoff{
+  font-family:var(--script);font-size:1.6rem;color:var(--rose-deep);
+  text-align:right;margin:18px 0 0;
+}
+
+.actions{display:flex;flex-wrap:wrap;gap:9px;margin-top:16px}
+.actions .btn{flex:1;min-width:150px}
+
+@media (max-width:400px){
+  .card{padding:18px 16px 22px;border-radius:22px}
+  h1{font-size:1.42rem}
+  .script{font-size:2.1rem}
+  .v-value{font-size:2.1rem}
+}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.001ms !important;transition-duration:.001ms !important}
+}
+</style>
+</head>
+<body>
+
+<canvas id="petals" aria-hidden="true"></canvas>
+<canvas id="confetti" aria-hidden="true"></canvas>
+
+<main class="card">
+
+  <div class="thread" aria-hidden="true">
+    <div class="thread-track">
+      <div class="thread-fill" id="threadFill"></div>
+      <span class="thread-bud" id="threadBud">🌸</span>
+    </div>
+    <span class="thread-step" id="threadStep">1 / 9</span>
+  </div>
+
+  <!-- 1 ........................................ HELLO -->
+  <section class="scene is-active" id="s-hi">
+    <p class="eyebrow">A tiny something</p>
+    <h1>🌸 Heyyy!</h1>
+    <p class="lede">I have a little surprise for you… 🎁<br>Do you want to see it?</p>
+    <div class="float-zone">
+      <div class="anchor center"><button class="btn" data-go="s-tie">yes 💕</button></div>
+      <button class="floaty" data-dodge="1" type="button">no</button>
+    </div>
+  </section>
+
+  <!-- 2 ........................................ TIE THE RAKHI -->
+  <section class="scene" id="s-tie">
+    <p class="eyebrow">First things first</p>
+    <h2>Tie the rakhi 🌸</h2>
+    <p class="lede">Slide all the way across. Gently — it's silk.</p>
+
+    <svg class="art" id="tieArt" width="300" height="150" viewBox="0 0 300 150" role="img" aria-label="A rakhi thread">
+      <path id="tieGhost" d="M14 96 Q 75 62 150 96 Q 225 130 286 96"
+            fill="none" stroke="#f6d4de" stroke-width="4" stroke-linecap="round" stroke-dasharray="2 9"/>
+      <path id="tieThread" d="M14 96 Q 75 62 150 96 Q 225 130 286 96"
+            fill="none" stroke="url(#thr)" stroke-width="5" stroke-linecap="round"
+            stroke-dasharray="330" stroke-dashoffset="330"/>
+      <defs>
+        <linearGradient id="thr" x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0%" stop-color="#d9a441"/>
+          <stop offset="50%" stop-color="#e8537f"/>
+          <stop offset="100%" stop-color="#c13a63"/>
+        </linearGradient>
+        <radialGradient id="ctr" cx="34%" cy="30%">
+          <stop offset="0%" stop-color="#fbeccb"/>
+          <stop offset="100%" stop-color="#d9a441"/>
+        </radialGradient>
+      </defs>
+      <g id="tieRakhi" opacity="0" style="transform:scale(.2)">
+        <g fill="#e8537f" opacity=".95">
+          <ellipse cx="150" cy="66" rx="11" ry="20"/>
+          <ellipse cx="150" cy="66" rx="11" ry="20" transform="rotate(45 150 86)"/>
+          <ellipse cx="150" cy="66" rx="11" ry="20" transform="rotate(90 150 86)"/>
+          <ellipse cx="150" cy="66" rx="11" ry="20" transform="rotate(135 150 86)"/>
+        </g>
+        <g fill="#c9a7e0" opacity=".9">
+          <ellipse cx="150" cy="70" rx="8" ry="16" transform="rotate(22 150 86)"/>
+          <ellipse cx="150" cy="70" rx="8" ry="16" transform="rotate(67 150 86)"/>
+          <ellipse cx="150" cy="70" rx="8" ry="16" transform="rotate(112 150 86)"/>
+          <ellipse cx="150" cy="70" rx="8" ry="16" transform="rotate(157 150 86)"/>
+        </g>
+        <circle cx="150" cy="86" r="15" fill="url(#ctr)"/>
+        <circle cx="150" cy="86" r="7" fill="#c13a63"/>
+        <circle cx="146" cy="82" r="2.2" fill="#fff" opacity=".8"/>
+      </g>
+    </svg>
+
+    <div class="slider-wrap">
+      <div class="slide-label"><span>slide to tie</span><span id="tiePct">0%</span></div>
+      <input type="range" id="tieRange" min="0" max="100" value="0" aria-label="Slide to tie the rakhi">
+    </div>
+    <p class="center" style="margin-top:6px"><button class="btn" id="tieNext" disabled>tied it! 🌸</button></p>
+  </section>
+
+  <!-- 3 ........................................ HAPPY RAKSHA BANDHAN -->
+  <section class="scene" id="s-rakhi">
+    <p class="eyebrow">🎀 The occasion 🎀</p>
+    <p class="script">Happy Raksha Bandhan!</p>
+    <p class="lede">You tied a Rakhi… so obviously, I owe you a gift. 😌🎁<br>Ready to see what I got you?</p>
+    <div class="float-zone">
+      <div class="anchor center"><button class="btn" data-go="s-expect">something special 💅</button></div>
+      <button class="floaty" data-dodge="1" type="button">anything is fine</button>
+    </div>
+  </section>
+
+  <!-- 4 ........................................ THE JOKE -->
+  <section class="scene" id="s-expect">
+    <p class="eyebrow">Noted</p>
+    <h1>Ohhh… so that's the expectation? 😂</h1>
+    <p class="lede">Let's see if your brother is rich enough. 💀</p>
+    <p class="center" style="margin-top:22px"><button class="btn" data-go="s-box">go on then →</button></p>
+  </section>
+
+  <!-- 5 ........................................ GIFT BOX -->
+  <section class="scene" id="s-box">
+    <p class="eyebrow">The reveal</p>
+    <h2 class="center" id="boxTitle">Tap the box 🎁</h2>
+    <svg class="giftbox" id="giftbox" viewBox="0 0 220 210" role="button" tabindex="0" aria-label="Open the gift box">
+      <ellipse id="boxGlow" cx="110" cy="120" rx="98" ry="72" fill="#ffd9e4" opacity="0"/>
+      <rect x="34" y="96" width="152" height="94" rx="12" fill="#e8537f"/>
+      <rect x="34" y="96" width="152" height="94" rx="12" fill="url(#boxShade)"/>
+      <rect x="96" y="96" width="28" height="94" fill="#f6e3ba"/>
+      <g id="boxLid">
+        <rect x="22" y="62" width="176" height="40" rx="10" fill="#c13a63"/>
+        <rect x="96" y="62" width="28" height="40" fill="#f6e3ba"/>
+        <path d="M110 62 C 88 62 74 44 86 32 c 12 -12 24 12 24 30 z" fill="#d9a441"/>
+        <path d="M110 62 C 132 62 146 44 134 32 c -12 -12 -24 12 -24 30 z" fill="#e8b95c"/>
+        <circle cx="110" cy="60" r="9" fill="#f6e3ba"/>
+      </g>
+      <defs>
+        <linearGradient id="boxShade" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#fff" stop-opacity=".22"/>
+          <stop offset="100%" stop-color="#000" stop-opacity=".08"/>
+        </linearGradient>
+      </defs>
+    </svg>
+    <p class="center lede" id="boxHint" style="margin-top:14px">it's not going to open itself 👀</p>
+    <p class="center" style="margin:0"><button class="btn" id="boxNext" hidden>ooh what is it →</button></p>
+  </section>
+
+  <!-- 6 ........................................ SHOPPING SITE -->
+  <section class="scene" id="s-site">
+    <p class="eyebrow">Quick question</p>
+    <h2>What is your favourite shopping site?</h2>
+    <p class="lede">Choose wisely. Or don't, they're mostly running away.</p>
+    <div class="tiles" id="tiles"></div>
+    <p class="toast" id="siteToast"></p>
+  </section>
+
+  <!-- 7 ........................................ CAUGHT IT -->
+  <section class="scene" id="s-caught">
+    <p class="eyebrow">Fine. FINE.</p>
+    <h1>OKAYYYYY!!! 😭❤️</h1>
+    <p class="lede">You finally caught it.<br>A <strong id="caughtBrand">Myntra</strong> voucher it is.</p>
+    <p class="center" style="margin-top:22px"><button class="btn" data-go="s-treaty">claim it 🎀</button></p>
+  </section>
+
+  <!-- 8 ........................................ SIBLING TREATY -->
+  <section class="scene" id="s-treaty">
+    <p class="eyebrow">The fine print</p>
+    <h2>Sign the Sibling Treaty ✍️</h2>
+    <p class="lede">Standard terms. Tick all four, they're non-negotiable.</p>
+    <div id="promises"></div>
+    <p class="warn" id="treatyWarn"></p>
+    <p><button class="btn wide" id="treatyNext" disabled>I agree to all of this 🖊️</button></p>
+  </section>
+
+  <!-- 9 ........................................ TREASURE CHEST -->
+  <section class="scene" id="s-chest">
+    <p class="eyebrow">One last thing</p>
+    <h2 class="center" id="chestTitle">The chest is locked 🔒</h2>
+    <p class="center lede" id="chestSub">Only you know the secret code. Punch it in.</p>
+
+    <div class="chest-stage" id="chestStage">
+      <svg id="chest" viewBox="0 0 220 200" role="img" aria-label="A locked treasure chest">
+        <g id="chestRays">
+          <path d="M110 96 L60 6 L96 0 z"   fill="#f6e3ba" opacity=".75"/>
+          <path d="M110 96 L110 -6 L136 4 z" fill="#ffe9a8" opacity=".8"/>
+          <path d="M110 96 L164 10 L176 34 z" fill="#f6e3ba" opacity=".6"/>
+        </g>
+        <g id="chestLid">
+          <path d="M28 100 C 28 52 82 34 110 34 C 138 34 192 52 192 100 z" fill="#c13a63"/>
+          <path d="M28 100 C 28 52 82 34 110 34 C 138 34 192 52 192 100 z" fill="url(#lidShade)"/>
+          <path d="M28 100 C 28 52 82 34 110 34 C 138 34 192 52 192 100" fill="none" stroke="#d9a441" stroke-width="5"/>
+          <rect x="98" y="36" width="24" height="66" fill="#d9a441" opacity=".9"/>
+          <rect x="24" y="94" width="172" height="16" rx="5" fill="#d9a441"/>
+        </g>
+        <rect x="28" y="110" width="164" height="72" rx="10" fill="#e8537f"/>
+        <rect x="28" y="110" width="164" height="72" rx="10" fill="url(#bodyShade)"/>
+        <rect x="98" y="110" width="24" height="72" fill="#d9a441" opacity=".9"/>
+        <rect x="24" y="172" width="172" height="14" rx="5" fill="#d9a441"/>
+        <g id="chestLock">
+          <rect x="94" y="118" width="32" height="30" rx="7" fill="#f6e3ba" stroke="#b8862c" stroke-width="2.5"/>
+          <circle cx="110" cy="131" r="4.6" fill="#8a5f1c"/>
+          <rect x="108" y="131" width="4" height="10" rx="2" fill="#8a5f1c"/>
+        </g>
+        <path id="chestShackle" d="M101 118 v-8 a9 9 0 0 1 18 0 v8"
+              fill="none" stroke="#b8862c" stroke-width="5" stroke-linecap="round"/>
+        <defs>
+          <linearGradient id="lidShade" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#fff" stop-opacity=".24"/>
+            <stop offset="100%" stop-color="#000" stop-opacity=".10"/>
+          </linearGradient>
+          <linearGradient id="bodyShade" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#fff" stop-opacity=".18"/>
+            <stop offset="100%" stop-color="#000" stop-opacity=".12"/>
+          </linearGradient>
+        </defs>
+      </svg>
+    </div>
+
+    <div id="lockUI">
+      <div class="pin-dots" id="pinDots" role="status" aria-label="PIN entry"></div>
+      <div class="keypad" id="keypad"></div>
+      <p class="warn center" id="pinWarn" style="margin-top:14px"></p>
+      <p class="center" style="margin:0"><button class="linkbtn" id="hintBtn">need a hint?</button></p>
+    </div>
+  </section>
+
+  <!-- 10 ....................................... VOUCHER -->
+  <section class="scene" id="s-voucher">
+    <p class="eyebrow">Unlocked 🎉</p>
+    <h2>🛍️ Your voucher is ready</h2>
+    <p class="lede">Straight out of the chest, just for you. 💗</p>
+
+    <div class="voucher">
+      <p class="v-brand" id="vBrand">Myntra gift voucher</p>
+      <p class="v-value" id="vValue">₹1000</p>
+      <p class="v-for" id="vFor">A gift from your brother 💗</p>
+
+      <div class="scratch-wrap" id="scratchWrap">
+        <p class="code-label">Voucher code</p>
+        <p class="code-val" id="vCode">XXXX-XXXX-XXXX</p>
+        <canvas id="scratch" aria-hidden="true"></canvas>
+      </div>
+      <p class="tiny center" id="scratchHint" style="margin:-6px 0 14px">👆 scratch to reveal &nbsp;·&nbsp; <button class="linkbtn" id="revealBtn" style="padding:0">just show me</button></p>
+
+      <dl class="v-rows">
+        <dt>Value</dt><dd id="vValue2">₹1000</dd>
+        <dt>Voucher PIN</dt><dd id="vPin">168436</dd>
+        <dt>Valid till</dt><dd id="vTill">28-04-27</dd>
+      </dl>
+    </div>
+
+    <p class="eyebrow">📌 How to redeem</p>
+    <ol class="steps" id="vSteps"></ol>
+
+    <div class="note" id="vNote">
+      <strong>Heads up:</strong> screenshot this page, or copy the details below — the chest locks again when you close the tab.
+    </div>
+
+    <div class="actions">
+      <button class="btn gold" id="copyBtn">Copy voucher details</button>
+      <button class="btn ghost" id="againBtn">Play it again 🎀</button>
+    </div>
+
+    <p class="signoff" id="signoff">— your favourite brother</p>
+  </section>
+
+</main>
+
+<script>
+/* ==================================================================
+   ✏️  CONFIG — edit this block and the whole page updates.
+   ================================================================== */
+const CONFIG = {
+  from:  "your favourite brother",   // how you sign off
+  to:    "",                          // her name — leave "" to skip
+
+  /* ---- the voucher ---- */
+  brand:      "Myntra",
+  value:      "₹1000",
+  voucherCode:"6001220251077400",       // 👈 PUT THE REAL CODE HERE
+  voucherPin: "168436",
+  validTill:  "28-04-27",
+
+  /* ---- the lock on the treasure chest ---- */
+  unlockPin: "2703",                  // 👈 the PIN she has to enter
+  hint:      "A date we both know by heart — day and month, no slash 🎂",
+
+  redeemSteps: [
+    "Open the Myntra app → Profile → Gift Cards.",
+    "Tap “Add Gift Card” and enter the code and PIN above.",
+    "The balance lands in your Myntra wallet. Go wild. 💃"
+  ],
+
+  /* ---- the shopping-site game: one is real, the rest run away ---- */
+  sites: [
+    { name:"Myntra",  ic:"🛍️", correct:true },
+    { name:"Amazon",  ic:"📦", quip:"Amazon? bold of you. 😌" },
+    { name:"Flipkart",ic:"🛒", quip:"Flipkart? in this economy? 💀" },
+    { name:"Zomato",  ic:"🍕", quip:"Zomato is food, not a gift. 😭" },
+    { name:"Blinkit", ic:"⚡", quip:"10 minutes of joy? absolutely not. 🙅‍♀️" }
+  ],
+  teaseOnCorrect: "Myntra? 👀 Nice choice… but let me think about that. 🤔",
+
+  promises: [
+    "I will not tell Mummy about the thing. Any of the things.",
+    "Last slice of pizza rights remain with whoever spotted it first.",
+    "Emergency loans stay under ₹500 and are never spoken of again.",
+    "Whoever starts the fight buys the samosas. No appeals."
+  ]
+};
+/* ================================================================== */
+
+const $ = id => document.getElementById(id);
+const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
+const state = { scratched:false };
+
+/* ---------- fill copy from CONFIG ---------- */
+$("caughtBrand").textContent = CONFIG.brand;
+$("vBrand").textContent = CONFIG.brand + " gift voucher";
+$("vValue").textContent = CONFIG.value;
+$("vValue2").textContent = CONFIG.value;
+$("vCode").textContent = CONFIG.voucherCode;
+$("vPin").textContent = CONFIG.voucherPin;
+$("vTill").textContent = CONFIG.validTill;
+$("signoff").textContent = "— " + CONFIG.from;
+$("vFor").textContent = CONFIG.to
+  ? "For " + CONFIG.to + ", with love 💗"
+  : "A gift from your brother 💗";
+$("vSteps").innerHTML = CONFIG.redeemSteps.map(s => `<li>${s}</li>`).join("");
+
+/* ---------- navigation ---------- */
+const ORDER = ["s-hi","s-tie","s-rakhi","s-expect","s-box","s-site",
+               "s-caught","s-treaty","s-chest","s-voucher"];
+const STEPS = 8; // shown on the thread; the two joke screens don't count
+
+function show(id){
+  document.querySelectorAll(".scene").forEach(s => s.classList.toggle("is-active", s.id === id));
+  const pct = Math.min(100, (ORDER.indexOf(id) / (ORDER.length - 1)) * 100);
+  $("threadFill").style.width = pct + "%";
+  $("threadBud").style.left = pct + "%";
+  $("threadStep").textContent = Math.min(STEPS, Math.max(1, Math.round(pct / 100 * STEPS) || 1)) + " / " + STEPS;
+  window.scrollTo({ top:0, behavior:"smooth" });
+  if (id === "s-voucher") setTimeout(initScratch, 60);
+}
+document.querySelectorAll("[data-go]").forEach(b =>
+  b.addEventListener("click", () => show(b.dataset.go))
+);
+
+/* ---------- floating "no" buttons ---------- */
+document.querySelectorAll("[data-dodge]").forEach(btn => {
+  const zoneEl = btn.parentElement;
+  const yesBtn = zoneEl.querySelector(".anchor .btn");
+  const PAD = 12;
+  let n = 0;
+  const jump = () => {
+    n++;
+    if (n > 7){ btn.classList.add("gone"); return; }
+    const zone = zoneEl.getBoundingClientRect();
+    const b    = btn.getBoundingClientRect();
+    const yes  = yesBtn ? yesBtn.getBoundingClientRect() : null;
+    const maxX = Math.max(0, zone.width  - b.width);
+    const maxY = Math.max(0, zone.height - b.height);
+    const clears = (x, y) => {
+      if (!yes) return true;
+      const L = zone.left + x, T = zone.top + y;
+      return L + b.width  < yes.left - PAD || L > yes.right  + PAD ||
+             T + b.height < yes.top  - PAD || T > yes.bottom + PAD;
+    };
+    let x = 0, y = 0, ok = false;
+    for (let i = 0; i < 40 && !ok; i++){
+      x = Math.random() * maxX;
+      y = Math.random() * maxY;
+      ok = clears(x, y);
+    }
+    if (!ok){                       // nowhere clear — drop into the strip below YES
+      y = Math.min(maxY, yes ? (yes.bottom - zone.top) + PAD : maxY);
+      x = Math.random() * maxX;
+    }
+    btn.style.transform = "none";
+    btn.style.left = x + "px";
+    btn.style.top  = y + "px";
+  };
+  btn.addEventListener("pointerenter", e => { if (e.pointerType === "mouse") jump(); });
+  btn.addEventListener("focus", jump);
+  btn.addEventListener("click", e => { e.preventDefault(); jump(); });
+});
+
+/* ---------- tie the rakhi ---------- */
+const tieRange = $("tieRange"), tieThread = $("tieThread"), tieRakhi = $("tieRakhi");
+let tied = false;
+tieRange.addEventListener("input", () => {
+  const v = Number(tieRange.value);
+  $("tiePct").textContent = v + "%";
+  tieThread.style.strokeDashoffset = 330 - (330 * v / 100);
+  const bloom = Math.max(0, (v - 55) / 45);
+  tieRakhi.style.opacity = bloom;
+  tieRakhi.style.transform = "scale(" + (0.2 + bloom * 0.8) + ") rotate(" + (bloom * 180) + "deg)";
+  if (v >= 100 && !tied){
+    tied = true;
+    $("tieNext").disabled = false;
+    $("tieNext").focus();
+    burst(50);
+  }
+});
+$("tieNext").addEventListener("click", () => show("s-rakhi"));
+
+/* ---------- the gift box ---------- */
+const giftbox = $("giftbox");
+function openBox(){
+  if (giftbox.classList.contains("open")) return;
+  giftbox.classList.add("open");
+  $("boxTitle").textContent = "Ta-daaa ✨";
+  $("boxHint").textContent = "okay it's not the box itself, obviously.";
+  $("boxNext").hidden = false;
+  burst(150);
+}
+giftbox.addEventListener("click", openBox);
+giftbox.addEventListener("keydown", e => {
+  if (e.key === "Enter" || e.key === " "){ e.preventDefault(); openBox(); }
+});
+$("boxNext").addEventListener("click", () => show("s-site"));
+
+/* ---------- shopping site chase ---------- */
+const tiles = $("tiles"), siteToast = $("siteToast");
+let order = CONFIG.sites.map((_, i) => i);
+let teased = false;
+
+function paintTiles(){
+  tiles.innerHTML = order.map(i => {
+    const s = CONFIG.sites[i];
+    return `<button class="tile" data-i="${i}" type="button">
+      <span class="ic" aria-hidden="true">${s.ic}</span>${s.name}</button>`;
+  }).join("");
+}
+function shuffleTiles(){
+  const before = new Map();
+  tiles.querySelectorAll(".tile").forEach(el => before.set(el.dataset.i, el.getBoundingClientRect()));
+  for (let i = order.length - 1; i > 0; i--){
+    const j = Math.floor(Math.random() * (i + 1));
+    [order[i], order[j]] = [order[j], order[i]];
+  }
+  paintTiles();
+  if (reduced) return;
+  tiles.querySelectorAll(".tile").forEach(el => {
+    const from = before.get(el.dataset.i), to = el.getBoundingClientRect();
+    if (!from) return;
+    el.style.transition = "none";
+    el.style.transform = `translate(${from.left - to.left}px,${from.top - to.top}px)`;
+    requestAnimationFrame(() => {
+      el.style.transition = "";
+      el.style.transform = "";
+    });
+  });
+}
+tiles.addEventListener("click", e => {
+  const el = e.target.closest(".tile");
+  if (!el) return;
+  const site = CONFIG.sites[Number(el.dataset.i)];
+  if (site.correct && teased){ show("s-caught"); burst(120); return; }
+  if (site.correct){
+    teased = true;
+    siteToast.textContent = CONFIG.teaseOnCorrect;
+  } else {
+    siteToast.textContent = site.quip || "not that one 👀";
+  }
+  el.classList.add("wobble");
+  setTimeout(() => shuffleTiles(), 220);
+});
+tiles.addEventListener("pointerover", e => {
+  if (e.pointerType !== "mouse") return;
+  const el = e.target.closest(".tile");
+  if (!el) return;
+  const site = CONFIG.sites[Number(el.dataset.i)];
+  if (!site.correct && Math.random() < 0.55) shuffleTiles();
+});
+paintTiles();
+
+/* ---------- sibling treaty ---------- */
+$("promises").innerHTML = CONFIG.promises.map((p, i) => `
+  <label class="promise"><input type="checkbox" data-p="${i}"><span>${p}</span></label>
+`).join("");
+$("promises").addEventListener("change", () => {
+  const all = [...$("promises").querySelectorAll("input")].every(c => c.checked);
+  $("treatyNext").disabled = !all;
+  $("treatyWarn").textContent = all ? "" : "";
+});
+$("treatyNext").addEventListener("click", () => { burst(60); show("s-chest"); });
+
+/* ---------- the treasure chest ---------- */
+const PIN = String(CONFIG.unlockPin);
+let entry = "", tries = 0;
+
+$("pinDots").innerHTML = [...PIN].map(() => `<span class="pin-dot"></span>`).join("");
+$("keypad").innerHTML =
+  [1,2,3,4,5,6,7,8,9].map(n => `<button class="key" data-k="${n}" type="button">${n}</button>`).join("") +
+  `<button class="key util" data-k="clear" type="button">clear</button>` +
+  `<button class="key" data-k="0" type="button">0</button>` +
+  `<button class="key util" data-k="del" type="button">⌫</button>`;
+
+function paintDots(){
+  $("pinDots").querySelectorAll(".pin-dot").forEach((d, i) =>
+    d.classList.toggle("filled", i < entry.length));
+}
+$("keypad").addEventListener("click", e => {
+  const k = e.target.closest(".key");
+  if (!k) return;
+  const v = k.dataset.k;
+  if (v === "del") entry = entry.slice(0, -1);
+  else if (v === "clear") entry = "";
+  else if (entry.length < PIN.length) entry += v;
+  $("pinWarn").textContent = "";
+  paintDots();
+  if (entry.length === PIN.length) setTimeout(checkPin, 220);
+});
+function checkPin(){
+  if (entry === PIN){ unlockChest(); return; }
+  tries++;
+  entry = "";
+  paintDots();
+  $("chestStage").classList.add("shake");
+  setTimeout(() => $("chestStage").classList.remove("shake"), 460);
+  const lines = ["Nope. The chest disagrees. 🙈",
+                 "Still locked. Think harder. 🤔",
+                 "Two left before I tell Mummy. 😤"];
+  $("pinWarn").textContent = lines[Math.min(tries - 1, lines.length - 1)];
+  if (tries >= 3) $("hintBtn").textContent = "okay fine, here's the hint 👉";
+}
+$("hintBtn").addEventListener("click", () => {
+  $("pinWarn").textContent = CONFIG.hint;
+});
+function unlockChest(){
+  $("chestStage").classList.add("unlocked");
+  $("chestTitle").textContent = "It's open! ✨";
+  $("chestSub").textContent = "Told you it was worth the wait.";
+  $("lockUI").hidden = true;
+  burst(200);
+  setTimeout(() => show("s-voucher"), 1500);
+}
+
+/* ---------- scratch card ---------- */
+const scratch = $("scratch");
+let sctx = null, scratching = false, scratchInit = false;
+
+function initScratch(){
+  if (scratchInit || state.scratched) return;
+  const wrap = $("scratchWrap");
+  const r = wrap.getBoundingClientRect();
+  if (!r.width) return;
+  const dpr = Math.min(window.devicePixelRatio || 1, 2);
+  scratch.width  = Math.round(r.width  * dpr);
+  scratch.height = Math.round(r.height * dpr);
+  sctx = scratch.getContext("2d");
+  sctx.scale(dpr, dpr);
+  const g = sctx.createLinearGradient(0, 0, r.width, r.height);
+  g.addColorStop(0,   "#f3c9d8");
+  g.addColorStop(.5,  "#e8b95c");
+  g.addColorStop(1,   "#e8537f");
+  sctx.fillStyle = g;
+  sctx.fillRect(0, 0, r.width, r.height);
+  sctx.fillStyle = "rgba(255,255,255,.92)";
+  sctx.font = "700 13px Quicksand, sans-serif";
+  sctx.textAlign = "center";
+  sctx.fillText("✨ scratch here ✨", r.width / 2, r.height / 2 + 4);
+  sctx.globalCompositeOperation = "destination-out";
+  scratchInit = true;
+}
+function scratchAt(e){
+  if (!sctx) return;
+  const r = scratch.getBoundingClientRect();
+  sctx.beginPath();
+  sctx.arc(e.clientX - r.left, e.clientY - r.top, 22, 0, Math.PI * 2);
+  sctx.fill();
+}
+scratch.addEventListener("pointerdown", e => {
+  scratching = true;
+  scratch.setPointerCapture(e.pointerId);
+  scratchAt(e);
+});
+scratch.addEventListener("pointermove", e => { if (scratching) scratchAt(e); });
+scratch.addEventListener("pointerup", () => {
+  scratching = false;
+  if (clearedEnough()) revealCode();
+});
+function clearedEnough(){
+  if (!sctx) return false;
+  const d = sctx.getImageData(0, 0, scratch.width, scratch.height).data;
+  let clear = 0;
+  for (let i = 3; i < d.length; i += 4 * 24) if (d[i] === 0) clear++;
+  return clear / (d.length / (4 * 24)) > 0.42;
+}
+function revealCode(){
+  state.scratched = true;
+  scratch.classList.add("cleared");
+  $("scratchHint").textContent = "there it is 🎉 tap “Copy voucher details” below.";
+  burst(90);
+}
+$("revealBtn").addEventListener("click", revealCode);
+window.addEventListener("resize", () => { scratchInit = false; initScratch(); });
+
+/* ---------- copy + replay ---------- */
+function voucherText(){
+  return [
+    "🎀 Happy Raksha Bandhan! 🎀",
+    "",
+    "🛍️ " + CONFIG.brand + " Voucher",
+    "Value: " + CONFIG.value,
+    "Code: " + CONFIG.voucherCode,
+    "Voucher PIN: " + CONFIG.voucherPin,
+    "Valid till: " + CONFIG.validTill,
+    "",
+    "To redeem:",
+    ...CONFIG.redeemSteps.map((s, i) => (i + 1) + ". " + s),
+    "",
+    "— " + CONFIG.from
+  ].join("\n");
+}
+$("copyBtn").addEventListener("click", async () => {
+  const text = voucherText();
+  try { await navigator.clipboard.writeText(text); }
+  catch {
+    const ta = document.createElement("textarea");
+    ta.value = text; ta.style.position = "fixed"; ta.style.opacity = "0";
+    document.body.appendChild(ta); ta.select();
+    try { document.execCommand("copy"); } catch {}
+    ta.remove();
+  }
+  revealCode();
+  $("copyBtn").textContent = "Copied 💗";
+  setTimeout(() => { $("copyBtn").textContent = "Copy voucher details"; }, 2400);
+});
+$("againBtn").addEventListener("click", () => location.reload());
+
+/* ---------- petals + confetti ---------- */
+const pc = $("petals").getContext("2d");
+const cc = $("confetti").getContext("2d");
+const PETAL = ["#ffd9e4","#f6d4de","#f6e3ba","#e7d3f2","#ffc9d8"];
+const CONF  = ["#e8537f","#c13a63","#d9a441","#c9a7e0","#f6e3ba","#79c9b4"];
+let petals = [], bits = [];
+
+function sizeCanvases(){
+  for (const c of [$("petals"), $("confetti")]){
+    c.width = innerWidth; c.height = innerHeight;
+  }
+}
+sizeCanvases();
+addEventListener("resize", sizeCanvases);
+
+function seedPetals(){
+  petals = Array.from({ length: 22 }, () => ({
+    x: Math.random() * innerWidth,
+    y: Math.random() * innerHeight,
+    r: 5 + Math.random() * 8,
+    vy: .28 + Math.random() * .55,
+    sway: .5 + Math.random() * 1.1,
+    ph: Math.random() * Math.PI * 2,
+    rot: Math.random() * Math.PI,
+    vr: (Math.random() - .5) * .02,
+    c: PETAL[(Math.random() * PETAL.length) | 0]
+  }));
+}
+function burst(n){
+  if (reduced) return;
+  for (let i = 0; i < n; i++){
+    bits.push({
+      x: innerWidth * (.15 + Math.random() * .7),
+      y: -20 - Math.random() * innerHeight * .25,
+      vx: (Math.random() - .5) * 3.4,
+      vy: 2 + Math.random() * 3.6,
+      w: 5 + Math.random() * 7,
+      h: 7 + Math.random() * 9,
+      rot: Math.random() * Math.PI,
+      vr: (Math.random() - .5) * .24,
+      c: CONF[(Math.random() * CONF.length) | 0],
+      life: 1
+    });
+  }
+}
+function frame(){
+  pc.clearRect(0, 0, innerWidth, innerHeight);
+  for (const p of petals){
+    p.y += p.vy; p.ph += .015; p.rot += p.vr;
+    p.x += Math.sin(p.ph) * p.sway;
+    if (p.y > innerHeight + 20){ p.y = -20; p.x = Math.random() * innerWidth; }
+    pc.save(); pc.translate(p.x, p.y); pc.rotate(p.rot);
+    pc.fillStyle = p.c; pc.globalAlpha = .75;
+    pc.beginPath(); pc.ellipse(0, 0, p.r, p.r * .58, 0, 0, Math.PI * 2); pc.fill();
+    pc.restore();
+  }
+  cc.clearRect(0, 0, innerWidth, innerHeight);
+  bits = bits.filter(b => b.life > 0 && b.y < innerHeight + 40);
+  for (const b of bits){
+    b.x += b.vx; b.y += b.vy; b.vy += .05; b.rot += b.vr;
+    if (b.y > innerHeight * .7) b.life -= .017;
+    cc.save(); cc.translate(b.x, b.y); cc.rotate(b.rot);
+    cc.globalAlpha = Math.max(0, b.life); cc.fillStyle = b.c;
+    cc.fillRect(-b.w / 2, -b.h / 2, b.w, b.h);
+    cc.restore();
+  }
+  requestAnimationFrame(frame);
+}
+if (!reduced){ seedPetals(); frame(); }
+
+show("s-hi");
+</script>
+</body>
+</html>
